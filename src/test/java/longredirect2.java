@@ -8,20 +8,32 @@ public class longredirect2 {
 
     @Test
     public void testLongRedirect2() {
+        String URL = "https://playground.learnqa.ru";
         Response response = RestAssured
+
                 .given()
                 .redirects()
                 .follow(false)
                 .when()
-                .get("https://playground.learnqa.ru/")
+                .get(URL)
                 .andReturn();
 
-        String locationHeader = response.getHeader("Location");
-        System.out.println(locationHeader);
-        int statusCode = response.getStatusCode();
-        while (statusCode != 200) {
-           testLongRedirect2 (locationHeader)
+        int statuscode = response.getStatusCode();
+        while (statuscode != 200) {
+            System.out.println(URL);
+            response = RestAssured
+                    .given()
+                    .redirects()
+                    .follow(false)
+                    .when()
+                    .get(URL)
+                    .andReturn();
+            statuscode = response.statusCode();
+            URL = response.getHeader("Location");
         }
-        System.out.println(statusCode);
+
+        System.out.println(statuscode);
     }
 }
+
+
